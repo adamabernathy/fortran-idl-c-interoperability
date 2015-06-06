@@ -1,18 +1,16 @@
 !234567-----------------------------------------------------------------73------|
 
-! ---------------------------------------------------------------------
+!
 !  This module contains functions to convert common units.
 !
-!  2015 Adam C. Abernathy, adamabernathy@gmail.com
-!  This software is licensed under Attribution-NonCommercial 4.0 
-!  International (CC BY-NC 4.0).
-! ---------------------------------------------------------------------
 
       module convert_units_lib
       
-      use :: iso_c_binding ! for C/C++ interoperability 
-      real(c_double), bind(c) :: inches
-             
+      use :: iso_c_binding ! for C/C++ interop
+      real(c_float), bind(c) :: inches
+      
+      !implicit none
+      
       public convert_m_in
       public convert_in_m
       public convert_f_c
@@ -22,19 +20,15 @@
 ! ---------------------------------------------------------------------
 !  Convert meters to inches
 !
-!  This function has been updated to operate with the ISO C/C++ interop
-!  standards. This should have no interference with native Fortran
-!  compiling. For class protection reasons, and for example purposes
-!  the function name is *not* bounded, and will require an explicit
-!  call from the C/C++ interface.
+!  This function is C/C++ bound. 
 ! --------------------------------------------------------------------- 
-      
-      pure real(kind=c_double) function convert_m_in(meters) &
-     &   result(inches)
-      
+      real(kind=c_float) function convert_m_in(meters) result(inches) &
+     &   bind(c,name="convert_m_in")
+     
          real, parameter :: in_per_m = 39.370079
       
-         real(c_double), intent(in) :: meters
+         real(c_float), intent(in) :: meters
+         !real, bind(C) :: inches
          
          inches = meters * in_per_m
             
@@ -43,20 +37,30 @@
 
 ! ---------------------------------------------------------------------
 !  Convert inches to meters
-!
-!  This function is *not* C/C++ compatible, since it has not been
-!  "C bounded"
 ! --------------------------------------------------------------------- 
-      pure function convert_in_m(inches) result(meters)
+      function convert_in_m(inches) result(meters)
       
          real, parameter :: m_per_in = 0.025400000
       
          real, intent(in) :: inches
+         real :: meters
          
          meters = inches * m_per_in
             
       end function convert_in_m     
+
+
+! ---------------------------------------------------------------------
+!  Convert temperature degrees Fahrenheit to Celsius       
+! ---------------------------------------------------------------------
+      function convert_f_c(df) result(dc)
       
+         real, intent(in) :: df
+         real             :: dc
+         
+         dc = (dc-32) / 1.8
+      
+      end function convert_f_c
 
 ! ---------------------------------------------------------------------
 

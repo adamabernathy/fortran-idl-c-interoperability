@@ -11,11 +11,10 @@
       module convert_units_lib
       
       use :: iso_c_binding ! for C/C++ interoperability 
-      real(c_double), bind(c) :: inches
+      real(c_float), bind(c) :: inches
              
       public convert_m_in
       public convert_in_m
-      public convert_f_c
       
       contains
 
@@ -27,14 +26,17 @@
 !  compiling. For class protection reasons, and for example purposes
 !  the function name is *not* bounded, and will require an explicit
 !  call from the C/C++ interface.
+!
+!  For C/C++ interop, comment out the 'bind(c,name="convert_m_in")'
+!  section of the function name.
 ! --------------------------------------------------------------------- 
       
-      pure real(kind=c_double) function convert_m_in(meters) &
-     &   result(inches)
+      real(kind=c_float) function convert_m_in(meters) &
+     &   result(inches) bind(c,name="convert_m_in")
       
          real, parameter :: in_per_m = 39.370079
       
-         real(c_double), intent(in) :: meters
+         real(c_float), intent(in) :: meters
          
          inches = meters * in_per_m
             

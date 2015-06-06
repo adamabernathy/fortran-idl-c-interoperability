@@ -17,14 +17,14 @@
 #
 
 #  Delete the old library
-rm -f convert_units_lib.so
+rm -f convert_units_module.so
 
 #  Build objects
-gfortran -c -std=f2003 -fcheck=all ../common/convert_units_lib.f03
-gfortran -c ../common/convert_units_lib.f03
+gfortran -c -std=f2003 -fcheck=all convert_units_lib.f03
+gfortran -c convert_units_lib.f03
 
 #  Create the shared (dynamic) library
-gcc -shared -fPIC convert_units_lib.o -o convert_units_lib.so
+gcc -shared -fPIC convert_units_lib.o -o convert_units_module.so
 
 #  Clean up
 rm -f *.o
